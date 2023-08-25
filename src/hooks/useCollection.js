@@ -1,3 +1,5 @@
+// this hook allows us to get the real time updates on a specific collection and get the documents and at the bottom we return the documents
+
 import { useEffect, useRef, useState } from "react"
 import { projectFirestore } from "../firebase/config"
 

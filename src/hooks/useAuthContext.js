@@ -1,3 +1,7 @@
+// this hook is allows us to use that context which we made in ../context/AuthContext
+// we use this hook in components in future where we want to get the current user
+
+
 import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
 

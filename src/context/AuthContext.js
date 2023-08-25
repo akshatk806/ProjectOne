@@ -15,6 +15,7 @@ export const authReducer = (state, action) => {
         case 'LOGOUT':
             return { ...state, user:null }    // we update our global auth state
 
+        // AUTH_IS_READY is the event that occurs one we first connect to firebase authentication to figure out that user is logged in or not
         case 'AUTH_IS_READY':
             return { ...state, user: action.payload, authIsReady:true }
             

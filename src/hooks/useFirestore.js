@@ -1,3 +1,5 @@
+// here we use a firestore reducer to update some initial state
+
 import { useReducer, useEffect, useState } from "react";
 import { projectFirestore, timestamp } from "../firebase/config"
 
