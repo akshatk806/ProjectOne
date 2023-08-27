@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { projectAuth } from '../firebase/config'
+import { projectAuth, projectFirestore } from '../firebase/config'
 import { useAuthContext } from "./useAuthContext";
 
 export const useLogout = () => {
@@ -9,7 +9,7 @@ export const useLogout = () => {
     const [error, setError] = useState(null);
     const [isPending, setIsPending] = useState(false);
 
-    const { dispatch } = useAuthContext();
+    const { dispatch, user } = useAuthContext();
 
     const logout = async () => {
         setError(null);
@@ -17,10 +17,15 @@ export const useLogout = () => {
 
         // logout the user
         try {   
+            // update online status
+            const { uid } = user
+            await projectFirestore.collection('users').doc(uid).update({ online: false })
+
             await projectAuth.signOut();       // firebase log out our user (asynchronous task)
 
             // dispatch logout action
             dispatch( {type: "LOGOUT"} )
+            setIsPending(false);
 
             // update state (after component unmount we don't allow states to updating)
             if(!isCancelled) {
