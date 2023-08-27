@@ -8,11 +8,42 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
-  const [thumbnail, setThumbnail] = useState(null);     // nothing selected to begin with
+  const [thumbnail, setThumbnail] = useState(null);     // nothing is selected to begin with
+  const [thumbnailError, setThumbnailError] = useState(null);
 
+  const handleFileChange = e => {
+    setThumbnail(null);
+    let selected = e.target.files[0];   // e.target.files returns an array of files
+    // so we select first file from the array
+
+    // console.log(selected);
+
+    if(!selected) {
+      setThumbnailError("Please Select a file");
+      return;
+    }
+    if(!selected.type.includes("image")) {
+      setThumbnailError("Invalid file type");
+      return;
+    }
+    if(selected.size > 1000000) { // 1 mb
+      setThumbnailError("Image file size must be less than 1MB")
+      return;
+    }  
+
+    // file is that selected is valid
+    setThumbnailError(null);
+    setThumbnail(selected);
+    // console.log("thumbnail updated");
+  }
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    // console.log(email, password, displayName, thumbnail);
+  }
 
   return (
-    <form className="auth-form">
+    <form className="auth-form" onSubmit={handleSubmit}>
         <h2>Sign up</h2>
         <label>
           <span>email:</span>
@@ -47,7 +78,9 @@ const Signup = () => {
           <span>profile thumbnail:</span>
           <input 
             type="file"
+            onChange={handleFileChange}
           />
+          {thumbnailError && <div className="error">{thumbnailError}</div>}
         </label>
         <button className="btn">Sign Up</button>
     </form>
