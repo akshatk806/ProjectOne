@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { projectAuth } from "../firebase/config"
+import { projectAuth, projectStorage } from "../firebase/config"
 
 // import useAuthContext hook so that we have access to that context object, and in that context object we have dispatch function
 import { useAuthContext } from './useAuthContext'
@@ -14,7 +14,7 @@ export const useSignup = () => {
     const { dispatch } = useAuthContext();
  
     // once the user is submit the form then only we invoked the below function that comes from this hook
-    const signup = async (email, password, displayName) => {
+    const signup = async (email, password, displayName, thumbnail) => {
         setError(null);   // imaging we fill up the form and we click on submit button, we call this signup function which takes 3 arguments and then some kind of error and then firebase comes up the error
         // we set the error everytime we try to signup
 
@@ -40,8 +40,17 @@ export const useSignup = () => {
                 throw new Error("Could not complete signup");
             }
 
+            // upload user thumbnail 
+            // step (i) creating upload path, that upload path is a folder structure
+            const uploadPath = `thumbnails/${response.user.uid}/${thumbnail.name}`;   // created a upload path where is the image is stored in the bucket
+
+            // step (ii) upload the image
+            const image = await projectStorage.ref(uploadPath).put(thumbnail);  
+            const imageURL = await image.ref.getDownloadURL();   // this gets up the url of the image
+
+
             // add the displayName to user in DB
-            await response.user.updateProfile( {displayName: displayName} );    // with response we get a user object
+            await response.user.updateProfile( {displayName: displayName, photoURL: imageURL } );    // with response we get a user object
 
             // dipatch login action
             dispatch({ type: 'LOGIN', payload: response.user})           // the input to dipatch method is action, which has two property i.e, type of action and payload 
