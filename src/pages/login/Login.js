@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLogin } from '../../hooks/useLogin';
 
 // styles
 import './Login.css'   // auth-form class css written in signup.css but that signup.css is become global so we don't need to write another css code in login.css
@@ -8,10 +9,12 @@ const Login = () => {
   // state for the fields
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login, error, isPending } = useLogin();
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(email, password)
+    // console.log(email, password)
+    login(email, password); 
   }
 
   return (
