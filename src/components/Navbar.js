@@ -15,7 +15,7 @@ const Navbar = () => {
         <ul>
             <li className="logo">
                 <img src={Logo} alt="myProject Logo" />
-                <span><Link to="/">MyProject</Link></span>
+                <span><Link to="/">ProjectOne</Link></span>
             </li>
 
             {!user && (

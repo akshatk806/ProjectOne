@@ -19,7 +19,7 @@ function App() {
     <div className="App">
       {authIsReady && (       // we only going to render all our Application when authentication is ready
         <BrowserRouter>
-          <Sidebar />
+          {user && <Sidebar />}
           <div className="container">
             <Navbar />
             <Switch>
