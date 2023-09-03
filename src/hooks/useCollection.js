@@ -25,12 +25,12 @@ export const useCollection = (collection, _query, _orderBy) => {
 
         // onSnapshot function fires a function for us everytime when we get the snapshot back from firestore collection. We get snapshot back once initially when we first made the connection and it sends us back a snapshot as argument inside function 
         const unsubscribe = ref.onSnapshot(snapshot => {      // this snapshot represents that collection at that moment in time we first connect to the collection which contains all the document to it. Thereafter it will fire this callback function again whenever the firestore collection changes
-            // So if we add a new document, delete a document or update a document then its gonna sends us a new snapshot and fires callback function again and therefore wecan update our states               
+            // So if we add a new document, delete a document or update a document then its gonna sends us a new snapshot and fires callback function again and therefore wecan update our states (on line 7 documents state)              
             let results = [];
 
             // .docs -> array of documents from snapshot
             snapshot.docs.forEach(doc => {
-                results.push({ ...doc.data(), id: doc.id })    // doc = {name, amount, user_id, createdAt}
+                results.push({ ...doc.data(), id: doc.id })    // doc = {name, amount, user_id, createdAt}  , // when we get the properties so we add the id property to it
             })
 
             setDocuments(results)
