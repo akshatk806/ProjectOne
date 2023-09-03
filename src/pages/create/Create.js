@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import Select from 'react-select';
 import { useCollection } from '../../hooks/useCollection'
+import { timestamp } from '../../firebase/config';
+import { useAuthContext } from '../../hooks/useAuthContext'
 
 // styles
 import './Create.css'
@@ -20,6 +22,7 @@ const Create = () => {
   const [users, setUsers] = useState([]);    // map through the documents of line 16 to create a new array based on the array of users and that new array of users is array of objects that will be passes as option in Select component
   // users array containing object having 5 properties, 3 is same as documents and 2 new which is value and label
 
+  const { user } = useAuthContext();
 
   // form fields value
   const [name, setName] = useState('');
@@ -57,7 +60,33 @@ const Create = () => {
       setFormError('Please assinged the project to atleast 1 user')
       return;
     }
-    // console.log(name, details, dueDate, category.value, assingedUsers);
+
+    const createdBy = {
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      id: user.uid
+    }
+
+    // assingedUsersList is a new array of objects, where each objects has 3 properties
+    const assingedUsersList = assingedUsers.map(user => {
+      return { 
+        displayName: user.value.displayName,
+        photoURL: user.value.photoURL,
+        id: user.value.id
+      }
+    })
+
+    // project object, this object will going to save to the database as a document
+    const project = {
+      name,
+      details,
+      category: category.value,
+      dueDate: timestamp.fromDate(new Date(dueDate)),
+      comments: [],
+      createdBy,
+      assingedUsersList
+    }
+    // console.log(project)
   }
 
   return (
