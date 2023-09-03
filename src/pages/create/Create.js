@@ -3,6 +3,8 @@ import Select from 'react-select';
 import { useCollection } from '../../hooks/useCollection'
 import { timestamp } from '../../firebase/config';
 import { useAuthContext } from '../../hooks/useAuthContext'
+import { useFirestore } from '../../hooks/useFirestore'
+import { useHistory } from 'react-router-dom'
 
 // styles
 import './Create.css'
@@ -15,6 +17,10 @@ const categories = [
 ]
 
 const Create = () => {
+  const history = useHistory();
+
+  const { addDocument, response } = useFirestore('projects')
+
   const { documents } = useCollection('users');
   // console.log(documents) // all the documents with their displayName, online and photoURL as property of object 
 
@@ -48,7 +54,7 @@ const Create = () => {
   }, [documents])
 
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError(null);   // every time we submit the form at beginning the error should be null
 
@@ -87,6 +93,12 @@ const Create = () => {
       assingedUsersList
     }
     // console.log(project)
+    await addDocument(project)
+
+    // redirect user if no error to home page
+    if(!response.error) {
+      history.push('/')
+    }
   }
 
   return (
