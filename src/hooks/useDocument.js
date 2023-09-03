@@ -11,8 +11,14 @@ export const useDocument = (collection, id) => {
         const ref = projectFirestore.collection(collection).doc(id)
 
         const unsubsribe = ref.onSnapshot(snapshot => {               // .onSnapshot method returns and an unsubsribe funtion and now we have to invoke that function in line 22 
-            setDocument({ ...snapshot.data(), id: snapshot.id })
-            setError(null);
+            if(snapshot.data()) {
+                setDocument({ ...snapshot.data(), id: snapshot.id })
+                setError(null);
+            }
+            else {
+                setError('No Such Project exists')
+            }
+
         }, (err) => {
             console.log(err.message)
             setError('failed to get document')
