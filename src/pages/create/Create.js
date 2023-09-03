@@ -28,6 +28,9 @@ const Create = () => {
   const [category, setCategory] = useState('');
   const [assingedUsers, setAssingedUsers] = useState([]);
 
+  // form error state
+  const [formError, setFormError] = useState(null);
+
 
   // cont... line 20: We have to map through documents objects to populate users. We use useEffect hook because the useEffect can listen the documents by listing the documents as depedency array and when documents is changing from null to list of users (coming from users colletion) we can fire the code to map them and then update the users based to that
   useEffect(() => {
@@ -44,6 +47,16 @@ const Create = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    setFormError(null);   // every time we submit the form at beginning the error should be null
+
+    if(!category) {
+      setFormError('Please select a project category');
+      return;
+    }
+    if(assingedUsers.length == 0) {
+      setFormError('Please assinged the project to atleast 1 user')
+      return;
+    }
     // console.log(name, details, dueDate, category.value, assingedUsers);
   }
 
@@ -96,6 +109,7 @@ const Create = () => {
         </label>
 
         <button className="btn">Add Project</button>
+        {formError && <p className='error'>{formError}</p>}
       </form>
     </div>
   )
