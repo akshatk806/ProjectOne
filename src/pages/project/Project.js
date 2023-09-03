@@ -3,6 +3,7 @@ import { useDocument } from "../../hooks/useDocument"
 
 // styles
 import './Project.css'
+import ProjectSummary from "./ProjectSummary"
 
 const Project = () => {
   const { id } = useParams()       // extracing a parameter from a route
@@ -19,7 +20,7 @@ const Project = () => {
 
   return (
     <div className="project-details">
-      <h1>{document.name}</h1>
+      <ProjectSummary project={document} />
     </div>
   )
 }
