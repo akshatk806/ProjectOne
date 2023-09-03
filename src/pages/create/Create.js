@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Select from 'react-select';
+import { useCollection } from '../../hooks/useCollection'
 
 // styles
 import './Create.css'
@@ -12,6 +13,14 @@ const categories = [
 ]
 
 const Create = () => {
+  const { documents } = useCollection('users');
+  // console.log(documents) // all the documents with their displayName, online and photoURL as property of object 
+
+  // when we pass array of object as options in Select component, each object has two properties value and label so we map through the documents and return a new array where each object has value and label
+  const [users, setUsers] = useState([]);    // map through the documents of line 16 to create a new array based on the array of users and that new array of users is array of objects that will be passes as option in Select component
+  // users array containing object having 5 properties, 3 is same as documents and 2 new which is value and label
+
+
   // form fields value
   const [name, setName] = useState('');
   const [details, setDetails] = useState('');
@@ -19,9 +28,23 @@ const Create = () => {
   const [category, setCategory] = useState('');
   const [assingedUsers, setAssingedUsers] = useState([]);
 
+
+  // cont... line 20: We have to map through documents objects to populate users. We use useEffect hook because the useEffect can listen the documents by listing the documents as depedency array and when documents is changing from null to list of users (coming from users colletion) we can fire the code to map them and then update the users based to that
+  useEffect(() => {
+    // inside the function we are going to map through documents
+    if(documents) {
+      const options = documents.map(user => {
+        return { value: user, label: user.displayName }   // completely new array
+      })
+      // console.log(options)     options: [{value: ..., label: ...}, {value: ..., label: ...}]
+      setUsers(options);
+    }
+  }, [documents])
+
+
   const handleSubmit = e => {
     e.preventDefault();
-    // console.log(name, details, dueDate, category.value);
+    // console.log(name, details, dueDate, category.value, assingedUsers);
   }
 
   return (
@@ -65,6 +88,11 @@ const Create = () => {
         </label>
         <label>
           <span>Assign to:</span>
+          <Select 
+            onChange={option => setAssingedUsers(option)}
+            options={users}
+            isMulti
+          />
         </label>
 
         <button className="btn">Add Project</button>
