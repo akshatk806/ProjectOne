@@ -1,4 +1,4 @@
-const filerList = ['all', 'mine', 'developement', 'design', 'marketing', 'sales'];
+const filerList = ['all', 'mine', 'development', 'design', 'marketing', 'sales'];
 
 const ProjectFilter = ({ currentFilter, changeFilter }) => {
     const handleClick = newFilter => {
