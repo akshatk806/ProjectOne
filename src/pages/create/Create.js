@@ -62,7 +62,7 @@ const Create = () => {
       setFormError('Please select a project category');
       return;
     }
-    if(assingedUsers.length == 0) {
+    if(assingedUsers.length === 0) {
       setFormError('Please assinged the project to atleast 1 user')
       return;
     }
