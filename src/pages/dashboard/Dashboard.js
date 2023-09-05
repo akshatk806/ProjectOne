@@ -9,7 +9,12 @@ import './Dashboard.css';
 
 const Dashboard = () => {
   const { user } = useAuthContext()
-  const { documents, error } = useCollection('projects')
+  const { documents, error } = useCollection(
+    'projects', 
+    null, 
+    ["dueDate", "asc"]
+  )
+  
   const [currentFilter, setCurrentFilter] = useState('all')
 
   const changeFilter = (newFilter) => {

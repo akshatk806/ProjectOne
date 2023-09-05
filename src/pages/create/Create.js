@@ -146,6 +146,8 @@ const Create = () => {
             onChange={option => setAssingedUsers(option)}
             options={users}
             isMulti
+            menuPlacement="auto"
+            maxMenuHeight={150}
           />
         </label>
 
