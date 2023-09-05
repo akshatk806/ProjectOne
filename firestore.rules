@@ -12,8 +12,32 @@ service cloud.firestore {
     // Make sure to write security rules for your app before that time, or else
     // all client requests to your Firestore database will be denied until you Update
     // your rules
-    match /{document=**} {
-      allow read, write: if request.time < timestamp.date(2023, 9, 24);
+
+    // the below line means match any document in any collection and allow read and write access to that if the requested is sending before given date 
+    // match /{document=**} {
+    //   allow read, write: if request.time < timestamp.date(2023, 9, 24);
+    // }
+
+
+    // firestore rules or match statements for users collection
+    // match any document inside the users collection and capture the id of the document inside the wild card variable so we can use it in rules down
+    match /users/{user_id} {
+      allow read, create: if request.auth != null;
+      allow update: if request.auth.uid == user_id;    // if the id of the user who is making request is equal to the id of document then only update
+    }
+
+    // firestore rules or match statements for projects collection
+    match /projects/{project_id} {
+      allow read, create, update: if request.auth != null;
+      allow delete: if request.auth.uid == resource.data.createdBy.id;   // resource is the object itself of the user
     }
   }
 }
+
+// users collection
+// - any authenticated user can read and create
+// only users who "own/created" a document can update it (user id's match)
+
+// projects collection
+// - any authenticated user can read, create and update a document
+// - only users who "own/created" a document can delete it
